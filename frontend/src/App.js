@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 
+
 /* Public pages */
 import PublicLayout from "./layouts/PublicLayout";
 import Home from "./pages/Home";
@@ -27,6 +28,7 @@ import AdminTeam from "./admin/AdminTeam";
 import AdminCampaigns from "./admin/AdminCampaigns";
 import CampaignDetail from "./pages/CampaignDetail";
 import AdminImpactReports from "./admin/AdminImpactReports";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
   return (
@@ -45,6 +47,7 @@ function App() {
   <Route path="/recycle-with-us" element={<RecycleWithUs />} />
   <Route path="/what-we-do" element={<WhatWeDo />} />
   <Route path="/careers" element={<Careers />} />
+  <Route path="/privacy" element={<PrivacyPolicy />} />
 </Route>
 
       {/* 🔐 ADMIN LOGIN (NO NAV/FOOTER) */}

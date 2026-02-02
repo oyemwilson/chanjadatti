@@ -9,16 +9,62 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
+import { useState } from "react";
 
+// Add this to your Footer component
 export default function Footer() {
+  const [formStatus, setFormStatus] = useState({ type: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const links = [
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setFormStatus({ type: "", message: "" });
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setFormStatus({
+          type: "success",
+          message: "Thank you for subscribing!",
+        });
+        form.reset();
+      } else {
+        setFormStatus({
+          type: "error",
+          message: "Something went wrong. Please try again.",
+        });
+      }
+    } catch (error) {
+      setFormStatus({
+        type: "error",
+        message: "Something went wrong. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+
+
+  const links = [
     { label: "About us", path: "/about" },
     { label: "What we do", path: "/what-we-do" },
     { label: "Our campaigns", path: "/campaigns" },
     { label: "Careers", path: "/careers" },
     { label: "Blog", path: "/blog" },
     { label: "Contact us", path: "/contact" },
+    { label: "Privacy Policy", path: "/privacy" },
   ];
 
   return (
@@ -26,7 +72,7 @@ export default function Footer() {
       <div className="max-w-[80%] mx-auto px-6 py-16">
         {/* Top Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          
+
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2">
@@ -79,31 +125,31 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-{/* Quick Links */}
-    <div>
-      <h4 className="font-semibold text-gray-900 mb-4">
-        Quick Links
-      </h4>
+          {/* Quick Links */}
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-4">
+              Quick Links
+            </h4>
 
-      <ul className="space-y-3 text-sm text-gray-600">
-        {links.map((item, index) => (
-          <li key={index}>
-            <Link
-              to={item.path}
-              className="flex items-center gap-2 group"
-            >
-              <span className="text-[#9DB36B] transition-transform duration-200 group-hover:translate-x-1">
-                →
-              </span>
+            <ul className="space-y-3 text-sm text-gray-600">
+              {links.map((item, index) => (
+                <li key={index}>
+                  <Link
+                    to={item.path}
+                    className="flex items-center gap-2 group"
+                  >
+                    <span className="text-[#9DB36B] transition-transform duration-200 group-hover:translate-x-1">
+                      →
+                    </span>
 
-              <span className="group-hover:text-[#9DB36B] transition-colors">
-                {item.label}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+                    <span className="group-hover:text-[#9DB36B] transition-colors">
+                      {item.label}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
 
           {/* Newsletter */}
@@ -112,24 +158,84 @@ export default function Footer() {
               Subscribe to our Newsletter
             </h4>
 
-            <div className="flex items-center border rounded-md overflow-hidden">
-              <input
-                type="email"
-                placeholder="Enter your Email"
-                className="w-full px-3 py-2 text-sm outline-none"
-              />
-              <button className="bg-[#9DB36B] px-4 py-2 text-white hover:bg-[#86A85C]">
-                →
-              </button>
-            </div>
+      <div>
+        {/* Success/Error Message */}
+        {formStatus.message && (
+          <div
+            className={`mb-2 p-2 rounded text-sm ${
+              formStatus.type === "success"
+                ? "bg-green-100 text-green-700 border border-green-300"
+                : "bg-red-100 text-red-700 border border-red-300"
+            }`}
+          >
+            {formStatus.message}
+          </div>
+        )}
+
+        <form
+          action="https://www.formbackend.com/f/eb508c55ca0021fd"
+          method="POST"
+          onSubmit={handleNewsletterSubmit}
+          className="flex items-center border rounded-md overflow-hidden"
+        >
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="Enter your Email"
+            className="w-full px-3 py-2 text-sm outline-none"
+          />
+
+          {/* ⭐ Identify source */}
+          <input type="hidden" name="formType" value="newsletter-footer" />
+
+          {/* ⭐ Optional anti spam */}
+          <input
+            type="text"
+            name="_gotcha"
+            style={{ display: "none" }}
+          />
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="bg-[#9DB36B] px-4 py-2 text-white hover:bg-[#86A85C] disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            {isSubmitting ? "..." : "→"}
+          </button>
+        </form>
+      </div>
 
             {/* Social */}
-<div className="flex items-center gap-4 mt-6 text-gray-600">
+            <div className="flex items-center gap-4 mt-6 text-gray-600">
               <span className="text-sm">Follow:</span>
 
-              <Facebook className="h-4 w-4 cursor-pointer hover:text-[#9DB36B]" />
-              <Instagram className="h-4 w-4 cursor-pointer hover:text-[#9DB36B]" />
-              <Twitter className="h-4 w-4 cursor-pointer hover:text-[#9DB36B]" />
+              <a
+                href="https://www.facebook.com/chanjadattirecycling?_rdc=1&_rdr#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex p-1"
+              >
+                <Facebook className="h-4 w-4 hover:text-[#9DB36B]" />
+              </a>
+              <a
+                href="https://www.instagram.com/chanjadatti"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex p-1"
+              >
+                <Instagram className="h-4 w-4 hover:text-[#9DB36B]" />
+              </a>
+              <a
+                href="https://x.com/chanjadattiltd"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex p-1"
+              >
+                <Twitter className="h-4 w-4 hover:text-[#9DB36B]" />
+              </a>
+
+
             </div>
           </div>
         </div>

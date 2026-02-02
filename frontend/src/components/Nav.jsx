@@ -42,7 +42,7 @@ useEffect(() => {
           <div className="flex items-center">
             <Link to="/" onClick={closeMenus}>
               <img
-                src="/images/Chanja-Logo.png"
+                src="/images/logo.png"
                 alt="Chanja Datti"
                 className="h-16 w-auto cursor-pointer"
               />
@@ -128,7 +128,7 @@ useEffect(() => {
 
           {/* CTA Button */}
           <div className="hidden lg:block">
-            <Link to="/get-recykoin" onClick={closeMenus} className="bg-[#E2F0CE] text-black px-6 py-3 lg:px-10 lg:py-4 rounded-2xl font-medium hover:bg-[#7BA717] hover:text-white transition">
+            <Link to="https://play.google.com/store/apps/details?id=com.chanjadatti.recykoin_mobile" target="_blank" onClick={closeMenus} className="bg-[#E2F0CE] text-black px-6 py-3 lg:px-10 lg:py-4 rounded-2xl font-medium hover:bg-[#7BA717] hover:text-white transition">
               Get Recykoin
             </Link>
           </div>
@@ -160,8 +160,12 @@ useEffect(() => {
                 </svg>
               </summary>
               <div className="ml-4 mt-2 space-y-2 border-l-2 border-green-100 pl-4">
-                <Link to="/services/recycling" onClick={closeMenus} className="block text-gray-600">Recycling</Link>
-                <Link to="/services/waste-mgt" onClick={closeMenus} className="block text-gray-600">Waste Management</Link>
+                  <Link to="/what-we-do" onClick={closeMenus} className="block px-4 py-2 hover:bg-gray-100">
+                    Services
+                  </Link>
+                  <Link to="/what-we-do#impact" onClick={closeMenus} className="block px-4 py-2 hover:bg-gray-100">
+                    Impact Report
+                  </Link>
               </div>
             </details>
 
@@ -198,7 +202,7 @@ useEffect(() => {
             </details>
 
             <Link to="/blog" onClick={closeMenus} className="block text-gray-700">Blog</Link>
-            <Link to="/get-recykoin" onClick={closeMenus} className="block text-center bg-[#E2F0CE] text-black py-2 rounded-full font-medium">
+            <Link to="https://play.google.com/store/apps/details?id=com.chanjadatti.recykoin_mobile" target="_blank" onClick={closeMenus} className="block text-center bg-[#E2F0CE] text-black py-2 rounded-full font-medium">
               Get Recykoin
             </Link>
           </div>

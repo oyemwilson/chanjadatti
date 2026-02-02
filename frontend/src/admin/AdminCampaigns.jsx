@@ -190,32 +190,71 @@ const fetchCampaigns = async () => {
         </div>
 
         {/* CONTENT */}
-        <Editor
-          apiKey="mkacsbt39n519iauctg43g63usgk8h8frp6446tgbzrow6a0"
-          value={form.content}
-          onEditorChange={(content) =>
-            setForm({ ...form, content })
+<Editor
+  apiKey="mkacsbt39n519iauctg43g63usgk8h8frp6446tgbzrow6a0"
+  value={form.content}
+  onEditorChange={(content) =>
+    setForm({ ...form, content })
+  }
+  init={{
+    height: 500,
+    menubar: false,
+
+    plugins: [
+      "lists",
+      "link",
+      "image",
+      "table",
+      "code",
+      "preview",
+    ],
+
+    toolbar:
+      "undo redo | blocks | fontsize | " +
+      "bold italic underline | forecolor backcolor | " +
+      "alignleft aligncenter alignright | " +
+      "bullist numlist | link image table | code preview",
+
+    fontsize_formats:
+      "12px 14px 16px 18px 20px 24px 28px 32px 36px 48px",
+
+    /* ⭐ IMAGE UPLOAD */
+    automatic_uploads: true,
+    file_picker_types: "image",
+    paste_data_images: true,
+
+    images_upload_handler: async (blobInfo) => {
+      try {
+        const formData = new FormData();
+
+        formData.append(
+          "file",
+          blobInfo.blob(),
+          blobInfo.filename()
+        );
+
+        // ⭐ Optional folder separation
+        formData.append("folder", "campaigns/editor");
+
+        const res = await api.post(
+          "/api/blogs/upload-editor-image", // reuse blog route
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           }
-          init={{
-            height: 500,
-            menubar: false,
-            plugins: [
-              "lists",
-              "link",
-              "image",
-              "table",
-              "code",
-              "preview",
-            ],
-            toolbar:
-              "undo redo | blocks | fontsize | " +
-              "bold italic underline | forecolor backcolor | " +
-              "alignleft aligncenter alignright | " +
-              "bullist numlist | link image table | code preview",
-            fontsize_formats:
-              "12px 14px 16px 18px 20px 24px 28px 32px 36px 48px",
-          }}
-        />
+        );
+
+        return res.data.location;
+      } catch (error) {
+        console.error("Editor upload error:", error);
+        throw new Error("Image upload failed");
+      }
+    },
+  }}
+/>
+
 
         {/* CTA */}
         <div className="grid grid-cols-2 gap-4">

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function ImageCarousel({ images = [] }) {
+export default function WhatWeDoImages({ images = [] }) {
   const [index, setIndex] = useState(0);
 
   const prev = () => {
@@ -12,7 +12,7 @@ export default function ImageCarousel({ images = [] }) {
   };
 
   return (
-    <div className="relative w-full h-[400px]  rounded-xl overflow-hidden bg-gray-200">
+    <div className="relative w-full h-[650px]  rounded-xl overflow-hidden bg-gray-200">
       {/* Images */}
       <div
         className="flex transition-transform duration-500 ease-in-out h-full"

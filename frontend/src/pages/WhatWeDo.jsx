@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import ImageCarousel from "../components/ImageCarousel";
 import api from "../utils/axiosConfig";
+import WhatWeDoImages from "../components/WhatWeDoImages";
+import { Link } from "react-router-dom";
+import Loading from "../components/Loading"; // ⭐ ADD
 
 export default function WhatWeDo() {
+
   const wasteImages = [
     "/whatwedo/waste1.jpeg",
     "/whatwedo/waste2.jpeg",
@@ -11,11 +15,8 @@ export default function WhatWeDo() {
     "/whatwedo/waste5.jpeg",
     "/whatwedo/waste6.jpeg",
     "/whatwedo/waste7.jpeg",
-    "/whatwedo/waste8.jpeg",
-    "/whatwedo/waste9.jpeg",
-    "/whatwedo/waste10.jpeg",
-    "/whatwedo/waste11.jpeg",
   ];
+
   const consultationImages = [
     "/whatwedo/consultation1.jpeg",
     "/whatwedo/consultation2.jpeg",
@@ -23,6 +24,10 @@ export default function WhatWeDo() {
     "/whatwedo/consultation4.jpeg",
     "/whatwedo/consultation5.jpeg",
     "/whatwedo/consultation6.jpeg",
+    "/whatwedo/waste8.jpeg",
+    "/whatwedo/waste9.jpeg",
+    "/whatwedo/waste10.jpeg",
+    "/whatwedo/waste11.jpeg",
   ];
 
   const plasticImages = [
@@ -50,18 +55,19 @@ export default function WhatWeDo() {
     "/whatwedo/achievingsdg8.jpeg",
   ];
 
-  const [reports, setReports] = useState([]); // ✅ fixed
+  const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  /* ---------- FETCH REPORTS ---------- */
   useEffect(() => {
     const fetchReports = async () => {
       try {
         const { data } = await api.get("/api/impact-reports");
-        setReports(data); // ✅ fixed
+        setReports(data);
       } catch (error) {
         console.error("Failed to fetch reports:", error);
       } finally {
-        setLoading(false);
+        setLoading(false); // ⭐ CORRECT PLACE
       }
     };
 
@@ -72,9 +78,16 @@ export default function WhatWeDo() {
     return api.defaults.baseURL || "";
   };
 
+  /* ---------- LOADING GUARD ---------- */
+  if (loading) return <Loading />;
+
+  /* ---------- PAGE JSX ---------- */
+
+
+
   return (
     <>
-      <section className="max-w-7xl mx-auto px-6 py-20 space-y-32">
+      <section className="max-w-[85%] mx-auto px-6 py-20 space-y-32">
         {/* Waste Collection */}
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
@@ -88,12 +101,14 @@ export default function WhatWeDo() {
             </p>
 
             <p className="mt-4 text-gray-600 leading-relaxed">
-            Collected recyclables are further processed at our plants into Pellets and Flakes and thereafter supplied to manufacturers and other recyclers who use the items as raw materials for the production in their manufacturing process.
+              Collected recyclables are further processed at our plants into Pellets and Flakes and thereafter supplied to manufacturers and other recyclers who use the items as raw materials for the production in their manufacturing process.
             </p>
 
-            <button className="mt-8 bg-[#7BA717] hover:bg-[#E2F0CE] hover:text-black text-white px-6 py-3 rounded-full">
-              Recycle with us
-            </button>
+            <Link to="/recycle-with-us">
+              <button className="mt-8 bg-[#7BA717] hover:bg-[#E2F0CE] hover:text-black text-white px-6 py-3 rounded-full">
+                Recycle with us
+              </button>
+            </Link>
           </div>
 
           <ImageCarousel images={wasteImages} />
@@ -109,13 +124,20 @@ export default function WhatWeDo() {
             </h2>
 
             <p className="mt-6 text-gray-600 leading-relaxed">
-              We leverage our internally processed pellets and flakes to manufacture durable, eco-friendly finished goods, effectively closing the waste loop. 
-               <span className="font-bold ml-1">Our Products include Bales, PET Flakes, HDPE Flakes, HDPE Pellets, Preform PET, Bowls, Dustpan.</span>
+              We leverage our internally processed pellets and flakes to manufacture durable, eco-friendly finished goods, effectively closing the waste loop.
+              <span className="font-bold ml-1">Our Products include Bales, PET Flakes, HDPE Flakes, HDPE Pellets, Preform PET, Bowls, Dustpan.</span>
             </p>
 
-            <button className="mt-8 bg-[#7BA717] hover:bg-[#E2F0CE] hover:text-black text-white px-6 py-3 rounded-full">
+            <button
+              onClick={() =>
+                window.location.href =
+                "mailto:info@chanjadatti.com?subject=Order Inquiry"
+              }
+              className="mt-8 bg-[#7BA717] hover:bg-[#E2F0CE] hover:text-black text-white px-6 py-3 rounded-full"
+            >
               Place an Order
             </button>
+
           </div>
         </div>
 
@@ -126,16 +148,19 @@ export default function WhatWeDo() {
             </h2>
 
             <p className="mt-6 text-gray-600 leading-relaxed">
-             We provide research, policy advisory, and practical training to strengthen waste management and recycling systems. We support organisations to design and set up efficient recycling operations, from feasibility and process design to on-ground implementation. 
+              We provide research, policy advisory, and practical training to strengthen waste management and recycling systems. We support organisations to design and set up efficient recycling operations, from feasibility and process design to on-ground implementation.
             </p>
 
             <p className="mt-4 text-gray-600 leading-relaxed">
-             We also help translate impact into credible ESG reporting aligned with global sustainability standards.
+              We also help translate impact into credible ESG reporting aligned with global sustainability standards.
             </p>
 
-            <button className="mt-8 bg-[#7BA717] hover:bg-[#E2F0CE] hover:text-black text-white px-6 py-3 rounded-full">
-              Contact Us
-            </button>
+            <Link to='/contact'>
+              <button className="mt-8 bg-[#7BA717] hover:bg-[#E2F0CE] hover:text-black text-white px-6 py-3 rounded-full">
+                Contact Us
+              </button>
+            </Link>
+
           </div>
 
           <ImageCarousel images={consultationImages} />
@@ -154,7 +179,7 @@ export default function WhatWeDo() {
             </p>
           </div>
 
-          <ImageCarousel images={sdgImages} />
+          <WhatWeDoImages images={sdgImages} />
         </div>
 
       </section>
@@ -202,7 +227,7 @@ export default function WhatWeDo() {
                           href={`${getApiBaseUrl()}/api/impact-reports/${report._id}/view`}
                           target="_blank"
                           rel="noopener noreferrer"
-                         className="inline-block bg-[#8BA63E] text-white px-16 py-3 rounded-full text-sm font-medium hover:bg-[#7A9337] transition"
+                          className="inline-block bg-[#8BA63E] text-white px-16 py-3 rounded-full text-sm font-medium hover:bg-[#7A9337] transition"
                         >
                           View PDF
                         </a>
@@ -236,9 +261,11 @@ export default function WhatWeDo() {
             </p>
           </div>
 
-          <button className="bg-[#7BA717] hover:bg-[#7A9337] text-white px-6 py-3 font-medium opacity-80 cursor-not-allowed">
-            Get Recykoin
-          </button>
+          <Link to="https://play.google.com/store/apps/details?id=com.chanjadatti.recykoin_mobile" target="_blank">
+            <button className="bg-[#7BA717] hover:bg-[#7A9337] text-white px-6 py-3 font-medium opacity-80 ">
+              Get Recykoin
+            </button>
+          </Link>
         </div>
       </section>
     </>

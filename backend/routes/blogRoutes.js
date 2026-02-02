@@ -5,6 +5,7 @@ import {
   createBlog,
   updateBlog,
   deleteBlog,
+  uploadEditorImage 
 } from "../controllers/blogController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 import upload from "../middleware/uploadMiddleware.js";
@@ -19,5 +20,7 @@ router.get("/:id", getBlogById);
 router.post("/", protect, admin, upload.single("image"), createBlog);
 router.put("/:id", protect, admin, upload.single("image"), updateBlog);
 router.delete("/:id", protect, admin, deleteBlog);
+router.post("/upload-editor-image", protect, admin,upload.single("file"),uploadEditorImage
+);
 
 export default router;

@@ -48,3 +48,22 @@ export const deleteBlog = async (req, res) => {
   await Blog.findByIdAndDelete(req.params.id);
   res.json({ message: "Blog deleted" });
 };
+
+export const uploadEditorImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        message: "No image file uploaded",
+      });
+    }
+
+    res.json({
+      location: req.file.path, // Cloudinary URL
+    });
+  } catch (error) {
+    console.error("Editor image upload error:", error);
+    res.status(500).json({
+      message: "Image upload failed",
+    });
+  }
+};

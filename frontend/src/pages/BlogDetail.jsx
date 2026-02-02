@@ -2,19 +2,47 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../utils/axiosConfig";
 import { Link } from "react-router-dom";
-
+import Loading from "../components/Loading"; // ⭐ ADD
 
 export default function BlogDetail() {
   const { id } = useParams();
+
   const [blog, setBlog] = useState(null);
   const [others, setOthers] = useState([]);
+  const [loading, setLoading] = useState(true); // ⭐ ADD
 
   useEffect(() => {
-    api.get(`/api/blogs/${id}`).then((res) => setBlog(res.data));
-    api.get("/api/blogs").then((res) => setOthers(res.data.slice(0, 2)));
+    const fetchBlogData = async () => {
+      try {
+        const [blogRes, othersRes] = await Promise.all([
+          api.get(`/api/blogs/${id}`),
+          api.get("/api/blogs"),
+        ]);
+
+        setBlog(blogRes.data);
+        setOthers(othersRes.data.slice(0, 2));
+      } catch (error) {
+        console.error("Failed to fetch blog detail");
+      } finally {
+        setLoading(false); // ⭐ IMPORTANT
+      }
+    };
+
+    fetchBlogData();
   }, [id]);
 
-  if (!blog) return null;
+  /* ⭐ LOADING FIRST */
+  if (loading) return <Loading />;
+
+  /* ⭐ SAFETY */
+  if (!blog) {
+    return (
+      <div className="py-20 text-center">
+        Blog not found
+      </div>
+    );
+  }
+
 
   return (
     <section className="py-16 max-w-4xl mx-auto px-4">

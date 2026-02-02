@@ -1,8 +1,21 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import api from "../utils/axiosConfig";
+import Loading from "../components/Loading";
 
 export default function AboutPage() {
+
+    const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 600); // short page transition loader
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <Loading />;
   return (
     <>
       <AboutIntro />
@@ -157,8 +170,7 @@ function MissionVision() {
         <div className="max-w-5xl mx-auto px-4 text-center">
           <h3 className="text-3xl font-semibold mb-2">Our Mission</h3>
           <p>
-            Chanja Datti is a social enterprise that currently collects waste plastic (PET bottles, pure water sachet, nylon bags etc.) and other recyclables 
-          </p>
+            To convert waste into commercially viable products while empowering women and youth entrepreneurs in the process.          </p>
         </div>
       </section>
 
@@ -166,8 +178,7 @@ function MissionVision() {
         <div className="max-w-5xl mx-auto px-4 text-center">
           <h3 className="text-3xl font-semibold mb-2">Our Vision</h3>
           <p>
-          Chanja Datti is a social enterprise that currently collects waste plastic (PET bottles, pure water sachet, nylon bags etc.) and other recyclables 
-          </p>
+          To become an industry name known for waste management solutions and recycling plastic waste products and youth empowerment in Nigeria within the next 5 years.          </p>
         </div>
       </section>
     </>
@@ -196,8 +207,7 @@ function CoreValues() {
       <div className="max-w-5xl mx-auto px-4 text-center">
         <h3 className="text-xl font-semibold mb-4">Our Core Values</h3>
         <p className="text-gray-600">
-          Chanja Datti is a social enterprise that currently collects waste plastic (PET bottles, pure water sachet, nylon bags etc.) and other recyclables 
-        </p>
+         A commitment to Innovation, Integrity, Impact, Committed Execution, Continuous improvement, Collaboration, Excellence, Eco-friendliness and Empathy (ICE3)        </p>
       </div>
       <div className="w-full max-w-5xl mx-auto p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">

@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef, } from 'react';
-import { partners } from '../data/partners.js';
+import React, { useState, useEffect, useRef } from "react";
+import { partners } from "../data/partners.js";
 import videos from "../data/thumbnails.js";
-import { Link } from 'react-router-dom';
-import { faqs } from '../data/faq.js';
+import { Link } from "react-router-dom";
+import { faqs } from "../data/faq.js";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import api from "../utils/axiosConfig";
+import Loading from "../components/Loading";
 
 const Home = () => {
-
   const [video, setVideo] = useState(null);
   const [open, setOpen] = useState(false);
   const scrollRef = useRef(null);
@@ -15,8 +15,24 @@ const Home = () => {
   const [thumbnail, setThumbnail] = useState("");
   const [openVideo, setOpenVideo] = useState(false);
   const [activeVideo, setActiveVideo] = useState(null);
+  const [campaigns, setCampaigns] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  /* ---------- FETCH CAMPAIGNS ---------- */
+  useEffect(() => {
+    const fetchCampaigns = async () => {
+      try {
+        const { data } = await api.get("/api/campaigns");
+        setCampaigns(Array.isArray(data) ? data : data.campaigns || []);
+      } catch (err) {
+        console.error("Failed to load campaigns");
+      }
+    };
 
+    fetchCampaigns();
+  }, []);
+
+  /* ---------- VIDEO HELPERS ---------- */
   const getEmbedUrl = (url) => {
     if (url.includes("youtu.be")) {
       return `https://www.youtube.com/embed/${url.split("youtu.be/")[1]}?autoplay=1`;
@@ -26,11 +42,8 @@ const Home = () => {
       return `https://www.youtube.com/embed/${url.split("v=")[1]}?autoplay=1`;
     }
 
-    return url; // fallback
+    return url;
   };
-
-
-
 
   const extractVideoId = (url) => {
     const reg =
@@ -47,6 +60,7 @@ const Home = () => {
         setVideo(data);
       } catch (err) {
         console.error("Failed to fetch hero video", err);
+        setLoading(false);
       }
     };
 
@@ -58,7 +72,10 @@ const Home = () => {
     if (!video?.videoUrl) return;
 
     const videoId = extractVideoId(video.videoUrl);
-    if (!videoId) return;
+    if (!videoId) {
+      setLoading(false);
+      return;
+    }
 
     const maxRes = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
     const sdRes = `https://img.youtube.com/vi/${videoId}/sddefault.jpg`;
@@ -72,19 +89,30 @@ const Home = () => {
       } else {
         setThumbnail(sdRes);
       }
+      setLoading(false);
     };
 
     img.onerror = () => {
       setThumbnail(hqRes);
+      setLoading(false);
     };
 
     img.src = maxRes;
   }, [video]);
 
-  /* ---------- RENDER SAFETY ---------- */
-  if (!video || !thumbnail) {
-    return null; // ✅ safe: AFTER all hooks
+  /* ---------- GLOBAL LOADING ---------- */
+  if (loading) {
+    return <Loading />;
   }
+
+  /* ---------- EXTRA SAFETY ---------- */
+  if (!video || !thumbnail) {
+    return <Loading />;
+  }
+
+  /* ---------- PAGE JSX BELOW ---------- */
+
+
 
 
 
@@ -161,7 +189,8 @@ const Home = () => {
                   Recycle with us
                 </Link>
 
-                <button className="flex items-center gap-4 text-gray-700 font-medium hover:text-green-600 transition text-left">
+                <Link to='https://www.youtube.com/@chanjadatti3738/videos' target='_blank'>
+                <button className="flex items-center gap-4 text-gray-700 font-medium hover:text-[#7BA717] transition text-left">
                   {/* PLAY ICON */}
                   <span className="flex items-center justify-center w-12 h-12 rounded-full border border-black text-black shrink-0">
                     ▶
@@ -173,6 +202,7 @@ const Home = () => {
                     <span>our Videos</span>
                   </div>
                 </button>
+                </Link>
               </div>
             </div>
 
@@ -216,7 +246,7 @@ const Home = () => {
         </div>
       </section>
       <section className="w-full bg-white">
-        <div className="max-w-[80%] mx-auto px-6 py-20">
+        <div className="lg:max-w-[80%] max-w-[100%] mx-auto px-6 py-20">
 
           {/* FROM THE CEO */}
           {/* Added responsive padding and centered items for better visual balance on mobile */}
@@ -227,7 +257,7 @@ const Home = () => {
               <img
                 src="/images/ceo-img.png"
                 alt="From the CEO"
-                className="w-full h-auto max-h-[400px] lg:max-h-none rounded-3xl object-cover "
+                className="w-full h-[350px] lg:h-auto max-h-[400px] lg:max-h-none rounded-3xl object-cover "
               />
             </div>
 
@@ -268,7 +298,7 @@ const Home = () => {
             <div className="relative w-full mx-auto rounded-2xl overflow-hidden">
               {/* Background thumbnail */}
               <div
-                className="relative w-full h-[260px] md:h-[620px]
+                className="relative w-full aspect-video md:aspect-auto md:h-[620px] md:h-[620px]
       bg-cover bg-center bg-no-repeat
       flex items-center justify-center cursor-pointer"
                 style={{ backgroundImage: `url(${thumbnail})` }}
@@ -322,7 +352,7 @@ const Home = () => {
 
         </div>
       </section>
-      <section className="hidden lg:block w-full ">
+      <section className=" ">
         <h2 className="text-center text-4xl font-extrabold text-gray-900 mb-10 mt-20">
           Our <span className="gradient-text">Campaigns</span>
         </h2>
@@ -330,7 +360,7 @@ const Home = () => {
 
           {/* SECTION TITLE */}
 
-          <div className='max-w-[85%] mx-auto py-14'>
+          <div className='max-w-[85%] mx-auto py-14 hidden lg:block w-full'>
             {/* ================= CAMPAIGN 1 ================= */}
             <div className="grid grid-cols-12 gap-12 mb-32 items-center">
 
@@ -487,7 +517,35 @@ const Home = () => {
         </div>
       </section>
       <section>
-        <div className='py-32 bg-white text-center'>
+<div className="relative w-full bg-[#F3F9E9] shadow-md rounded-md   z-50 border border-gray-100">
+
+  {campaigns.length === 0 && (
+    <div className="px-4 py-2 text-sm text-gray-500">
+      No campaigns available
+    </div>
+  )}
+
+  {/* ================= DESKTOP LIST ================= */}
+
+  {/* ================= MOBILE BUTTON GRID ================= */}
+  <div className=" w-full  lg:hidden">
+    {campaigns.map((campaign) => (
+      <Link
+        key={campaign._id}
+        to={`/campaigns/${campaign._id}`}
+        className="flex items-center  justify-center text-center px-3 py-10 rounded-lg border border-gray-200 
+                   hover:bg-[#9DB36B] hover:text-white transition-all text-xl font-medium"
+      >
+        {campaign.title}
+      </Link>
+    ))}
+  </div>
+
+</div>
+
+      </section>
+      <section>
+        <div className='pb-32 pt-10 bg-white text-center'>
           <Link
             to="/campaigns"
             className='group inline-flex items-center gap-2 text-[#9DB36B] font-bold text-xl uppercase tracking-widest hover:text-black transition-colors'
@@ -515,13 +573,15 @@ const Home = () => {
             </p>
 
             {/* Google Play Placeholder */}
-            <div className="mt-8">
-              <img src="./images/googleplay.png" alt="" />
+            <Link to="https://play.google.com/store/apps/details?id=com.chanjadatti.recykoin_mobile&pli=1" target='_blank'>
+            <div className="mt-8 flex justify-center md:justify-start">
+              <img src="./images/googleplay.png" className='' alt="" />
             </div>
+            </Link>
           </div>
 
           {/* Right Phone Mockup */}
-          <div className="flex justify-center md:justify-start">
+          <div className="flex justify-center md:justify-start mt-10 lg:mt-0">
             <div className="relative">
               <img
                 src="/images/mobile.png"
@@ -543,7 +603,7 @@ const Home = () => {
           Our{" "}
           <span className="gradient-text">Impact</span>
         </h2>
-        <div className="max-w-[85%] mx-auto px-6">
+        <div className="max-w-[100%] lg:max-w-[85%] mx-auto px-6">
           <div className="relative">
 
             {/* LEFT BUTTON */}
@@ -568,7 +628,7 @@ const Home = () => {
                     setActiveVideo(video);
                     setOpenVideo(true);
                   }}
-                  className="relative w-full lg:w-[calc(50%-16px)] h-[300px] lg:h-[400px]
+                  className="relative w-full lg:w-[calc(50%-16px)] relative w-full aspect-video md:h-[400px]
         rounded-2xl overflow-hidden shrink-0 shadow-lg snap-center
         cursor-pointer"
                 >

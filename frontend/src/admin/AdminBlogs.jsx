@@ -151,34 +151,70 @@ const submitHandler = async (e) => {
   </div>
 
   {/* 📝 TINYMCE EDITOR */}
-  <Editor
-    apiKey="mkacsbt39n519iauctg43g63usgk8h8frp6446tgbzrow6a0"
-    value={form.content}
-    onEditorChange={(content) =>
-      setForm({ ...form, content })
-    }
-    init={{
-      height: 450,
-      menubar: false,
-      plugins: [
-        "lists",
-        "link",
-        "image",
-        "code",
-        "preview",
-        "table",
-      ],
-      toolbar:
-        "undo redo | blocks | fontsize | " +
-        "bold italic underline | forecolor backcolor | " +
-        "alignleft aligncenter alignright | " +
-        "bullist numlist | link image table | code preview",
-      fontsize_formats:
-        "12px 14px 16px 18px 20px 24px 28px 32px 36px 48px",
-      content_style:
-        "body { font-family: Inter, Helvetica, Arial, sans-serif; font-size: 16px }",
-    }}
-  />
+<Editor
+  apiKey="mkacsbt39n519iauctg43g63usgk8h8frp6446tgbzrow6a0"
+  value={form.content}
+  onEditorChange={(content) =>
+    setForm({ ...form, content })
+  }
+  init={{
+    height: 450,
+    menubar: false,
+
+    plugins: [
+      "lists",
+      "link",
+      "image",
+      "code",
+      "preview",
+      "table",
+    ],
+
+    toolbar:
+      "undo redo | blocks | fontsize | " +
+      "bold italic underline | forecolor backcolor | " +
+      "alignleft aligncenter alignright | " +
+      "bullist numlist | link image table | code preview",
+
+    fontsize_formats:
+      "12px 14px 16px 18px 20px 24px 28px 32px 36px 48px",
+
+    content_style:
+      "body { font-family: Inter, Helvetica, Arial, sans-serif; font-size: 16px }",
+
+    /* ⭐ IMAGE UPLOAD SETTINGS */
+    automatic_uploads: true,
+    file_picker_types: "image",
+
+    images_upload_handler: async (blobInfo) => {
+      try {
+        const formData = new FormData();
+
+        formData.append(
+          "file",
+          blobInfo.blob(),
+          blobInfo.filename()
+        );
+
+        const res = await api.post(
+          "/api/blogs/upload-editor-image",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        return res.data.location; // Cloudinary URL
+      } catch (error) {
+        console.error("TinyMCE upload error:", error);
+        throw new Error("Image upload failed");
+      }
+    },
+  }}
+/>
+
 
   {/* ACTION BUTTONS */}
   <div className="flex gap-3">

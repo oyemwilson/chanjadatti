@@ -1,4 +1,18 @@
+import { useState, useEffect } from "react";
+import Loading from "../components/Loading";
+
 export default function Careers() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 600); // small page transition feel
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <Loading />;
   return (
     <section className="w-full bg-white">
       {/* Image Header */}
