@@ -19,7 +19,7 @@ router.get("/active", getActiveCampaign);
 router.get("/:id", getCampaignById);
 
 /* ADMIN */
-router.get("/", protect, admin, getAllCampaigns);
+router.get("/", getAllCampaigns);
 router.post(
   "/",
   protect,
