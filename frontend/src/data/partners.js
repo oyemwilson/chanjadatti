@@ -1,0 +1,18 @@
+export const partners = [
+  { id: 1, name: 'Partner 1', logo: '/logo/logo1.png' },
+  { id: 2, name: 'Partner 2', logo: '/logo/logo2.png' },
+  { id: 3, name: 'Partner 3', logo: '/logo/logo3.png' },
+  { id: 4, name: 'Partner 4', logo: '/logo/logo4.png' },
+  { id: 5, name: 'Partner 5', logo: '/logo/logo5.png' },
+  { id: 6, name: 'Partner 6', logo: '/logo/logo6.png' },
+  { id: 7, name: 'Partner 7', logo: '/logo/logo7.png' },
+  { id: 8, name: 'Partner 8', logo: '/logo/logo8.png' },
+  { id: 9, name: 'Partner 9', logo: '/logo/logo9.png' },
+  { id: 10, name: 'Partner 10', logo: '/logo/logo10.png' },
+  { id: 11, name: 'Partner 11', logo: '/logo/logo11.png' },
+  { id: 12, name: 'Partner 12', logo: '/logo/logo12.png' },
+  { id: 13, name: 'Partner 13', logo: '/logo/logo13.png' },
+  { id: 14, name: 'Partner 14', logo: '/logo/logo14.png' },
+  { id: 15, name: 'Partner 15', logo: '/logo/logo15.png' },
+  { id: 16, name: 'Partner 16', logo: '/logo/logo16.png' },
+];
