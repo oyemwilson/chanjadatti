@@ -20,8 +20,8 @@ app.use(
       "http://localhost:5173", // Vite
       "http://localhost:3000", // CRA
       "http://localhost:4000", // your custom frontend
-      "https://chanjadatti-1.onrender.com",
-      "https://chanjadatti.onrender.com"
+      "http://chanjadatti-1.onrender.com",
+      "http://chanjadatti.onrender.com"
     ],
     credentials: true,
   })
