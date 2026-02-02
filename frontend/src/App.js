@@ -54,17 +54,17 @@ function App() {
       <Route path="/admin/login" element={<AdminLogin />} />
 
       {/* 🛡️ PROTECTED ADMIN */}
-      <Route element={<AdminRoute />}>
-        <Route element={<AdminLayout />}>
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/videos" element={<AdminVideos />} />
-          <Route path="/admin/teams" element={<AdminTeam />} />
-          <Route path="/admin/blogs" element={<AdminBlogs />} />
-          <Route path="/admin/campaigns" element={<AdminCampaigns />} />
-          <Route path="/admin/impact-reports" element={<AdminImpactReports />} />
+<Route element={<AdminRoute />}>
+  <Route path="/admin" element={<AdminLayout />}>
+    <Route index element={<AdminDashboard />} />
+    <Route path="videos" element={<AdminVideos />} />
+    <Route path="teams" element={<AdminTeam />} />
+    <Route path="blogs" element={<AdminBlogs />} />
+    <Route path="campaigns" element={<AdminCampaigns />} />
+    <Route path="impact-reports" element={<AdminImpactReports />} />
+  </Route>
+</Route>
 
-        </Route>
-      </Route>
 
     </Routes>
   );
