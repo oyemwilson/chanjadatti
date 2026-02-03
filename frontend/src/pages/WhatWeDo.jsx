@@ -87,7 +87,7 @@ export default function WhatWeDo() {
 
   return (
     <>
-      <section className="max-w-[85%] mx-auto px-6 py-20 space-y-32">
+      <section className="lg:max-w-[85%] max-w-[95%] mx-auto px-6 py-20 space-y-32">
         {/* Waste Collection */}
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
@@ -115,31 +115,30 @@ export default function WhatWeDo() {
         </div>
 
         {/* Plastic Manufacturing */}
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <ImageCarousel images={plasticImages} />
-
-          <div className="text-right md:text-left">
-            <h2 className="text-3xl font-bold">
-              Plastic <span className="gradient-text">Manufacturing</span>
-            </h2>
-
-            <p className="mt-6 text-gray-600 leading-relaxed">
-              We leverage our internally processed pellets and flakes to manufacture durable, eco-friendly finished goods, effectively closing the waste loop.
-              <span className="font-bold ml-1">Our Products include Bales, PET Flakes, HDPE Flakes, HDPE Pellets, Preform PET, Bowls, Dustpan.</span>
-            </p>
-
-            <button
-              onClick={() =>
-                window.location.href =
-                "mailto:info@chanjadatti.com?subject=Order Inquiry"
-              }
-              className="mt-8 bg-[#7BA717] hover:bg-[#E2F0CE] hover:text-black text-white px-6 py-3 rounded-full"
-            >
-              Place an Order
-            </button>
-
-          </div>
-        </div>
+<div className="grid md:grid-cols-2 gap-12 items-center">
+  {/* Text - comes first on mobile, second on desktop */}
+  <div className="text-left md:order-2">
+    <h2 className="text-3xl font-bold">
+      Plastic <span className="gradient-text">Manufacturing</span>
+    </h2>
+    <p className="mt-6 text-gray-600 leading-relaxed">
+      We leverage our internally processed pellets and flakes to manufacture durable, eco-friendly finished goods, effectively closing the waste loop.
+      <span className="font-bold ml-1">Our Products include Bales, PET Flakes, HDPE Flakes, HDPE Pellets, Preform PET, Bowls, Dustpan.</span>
+    </p>
+    <button
+      onClick={() =>
+        window.location.href =
+        "mailto:info@chanjadatti.com?subject=Order Inquiry"
+      }
+      className="mt-8 bg-[#7BA717] hover:bg-[#E2F0CE] hover:text-black text-white px-6 py-3 rounded-full"
+    >
+      Place an Order
+    </button>
+  </div>
+  
+  {/* Image - comes second on mobile, first on desktop */}
+  <ImageCarousel images={plasticImages} className="md:order-1" />
+</div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center ">
           <div>
@@ -186,7 +185,7 @@ export default function WhatWeDo() {
 
       {/* Impact Reports */}
       <section className="bg-[#F3F8E6] py-14" id="impact">
-        <div className="max-w-[80%] mx-auto px-4">
+        <div className="lg:max-w-[80%] max-w-[100%] mx-auto px-1">
           <h2 className="text-center text-2xl font-semibold text-gray-900 mb-10">
             Impact Reports
           </h2>

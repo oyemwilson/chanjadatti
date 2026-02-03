@@ -574,14 +574,14 @@ const Home = () => {
 
             {/* Google Play Placeholder */}
             <Link to="https://play.google.com/store/apps/details?id=com.chanjadatti.recykoin_mobile&pli=1" target='_blank'>
-            <div className="mt-8 flex justify-center md:justify-start">
+            <div className="mt-8 flex justify-start md:justify-start">
               <img src="./images/googleplay.png" className='' alt="" />
             </div>
             </Link>
           </div>
 
           {/* Right Phone Mockup */}
-          <div className="flex justify-center md:justify-start mt-10 lg:mt-0">
+          <div className="flex justify-start md:justify-start mt-10 lg:mt-0">
             <div className="relative">
               <img
                 src="/images/mobile.png"

@@ -12,7 +12,7 @@ export default function ImageCarousel({ images = [] }) {
   };
 
   return (
-    <div className="relative w-full h-[400px]  rounded-xl overflow-hidden bg-gray-200">
+    <div className="relative w-full lg:h-[400px] h-[250px]  rounded-xl overflow-hidden bg-gray-200">
       {/* Images */}
       <div
         className="flex transition-transform duration-500 ease-in-out h-full"
