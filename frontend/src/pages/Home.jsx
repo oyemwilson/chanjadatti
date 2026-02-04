@@ -17,6 +17,8 @@ const Home = () => {
   const [activeVideo, setActiveVideo] = useState(null);
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showCampaignModal, setShowCampaignModal] = useState(false);
+
 
   /* ---------- FETCH CAMPAIGNS ---------- */
   useEffect(() => {
@@ -544,37 +546,85 @@ const Home = () => {
 </div>
 
       </section>
-      <section>
-        <div className='pb-32 pt-10 bg-white text-center'>
-          <Link
-            to="/campaigns"
-            className='group inline-flex items-center gap-2 text-[#9DB36B] font-bold text-xl uppercase tracking-widest hover:text-black transition-colors'
-          >
-            View More
-            <span className="text-2xl transition-transform duration-300 group-hover:translate-x-2">
-              →
-            </span>
-          </Link>
-        </div>
+<section>
+  <div className='pb-32 pt-10 bg-white text-center'>
+    <button
+      onClick={() => setShowCampaignModal(true)}
+      className='group inline-flex items-center gap-2 text-[#9DB36B] font-bold text-xl uppercase tracking-widest hover:text-black transition-colors'
+    >
+      View More
+      <span className="text-2xl transition-transform duration-300 group-hover:translate-x-2">
+        →
+      </span>
+    </button>
+  </div>
+</section>
+{showCampaignModal && (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
 
-      </section>
+    {/* Modal Box */}
+    <div className="bg-white w-full max-w-4xl max-h-[85vh] rounded-xl shadow-2xl overflow-hidden flex flex-col ">
+
+      {/* Header */}
+      <div className="flex justify-between items-center px-6 py-4 border-b">
+        <h2 className="text-2xl font-bold text-[#9DB36B]">
+          All Campaigns
+        </h2>
+
+        <button
+          onClick={() => setShowCampaignModal(false)}
+          className="text-2xl font-bold hover:text-red-500"
+        >
+          ×
+        </button>
+      </div>
+
+      {/* Campaign List */}
+      <div className="p-6 overflow-y-auto ">
+
+        {campaigns.length === 0 ? (
+          <p className="text-gray-500 text-center">No campaigns available</p>
+        ) : (
+<div className="flex flex-col gap-3">
+
+
+            {campaigns.map((campaign) => (
+              <Link
+                key={campaign._id}
+                to={`/campaigns/${campaign._id}`}
+                onClick={() => setShowCampaignModal(false)}
+                className="p-6 rounded-lg border border-gray-200 hover:bg-[#9DB36B] transition-all text-center font-semibold bg-[#F3F9E9]"
+              >
+                {campaign.title}
+              </Link>
+            ))}
+
+          </div>
+        )}
+
+      </div>
+
+    </div>
+  </div>
+)}
+
       <section className="bg-[#F3F9E9] w-full py-20 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-0">
 
           {/* Left Content */}
-          <div className='md:ml-40'>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
+          <div className='md:ml-40 '>
+            <h1 className="text-3xl md:text-5xl font-bold text-gray-900 text-center md:text-start">
               Download <span className="text-[#9DB36B]">Recykoin</span>
             </h1>
 
-            <p className="mt-4 text-gray-600 max-w-md">
+            <p className="mt-4 text-gray-600 max-w-md text-center md:text-start">
               Recycle with ease and get paid when you use our mobile application,
               Recykoin.
             </p>
 
             {/* Google Play Placeholder */}
             <Link to="https://play.google.com/store/apps/details?id=com.chanjadatti.recykoin_mobile&pli=1" target='_blank'>
-            <div className="mt-8 flex justify-start md:justify-start">
+            <div className="mt-8 flex justify-center md:justify-start">
               <img src="./images/googleplay.png" className='' alt="" />
             </div>
             </Link>

@@ -15,6 +15,10 @@ export default function WhatWeDo() {
     "/whatwedo/waste5.jpeg",
     "/whatwedo/waste6.jpeg",
     "/whatwedo/waste7.jpeg",
+         "/whatwedo/plastic1.jpeg",
+    "/whatwedo/plastic2.jpeg",
+     "/whatwedo/plastic3.jpeg",
+     "/whatwedo/plastic4.jpeg",
   ];
 
   const consultationImages = [
@@ -31,17 +35,23 @@ export default function WhatWeDo() {
   ];
 
   const plasticImages = [
-    "/whatwedo/plastic1.jpeg",
-    "/whatwedo/plastic2.jpeg",
-    "/whatwedo/plastic3.jpeg",
-    "/whatwedo/plastic4.jpeg",
-    "/whatwedo/plastic5.jpeg",
-    "/whatwedo/plastic6.jpeg",
-    "/whatwedo/plastic7.jpeg",
-    "/whatwedo/plastic8.jpeg",
-    "/whatwedo/plastic9.jpeg",
-    "/whatwedo/plastic10.jpeg",
-    "/whatwedo/plastic12.jpeg",
+    // "/whatwedo/plastic1.jpeg",
+    // "/whatwedo/plastic2.jpeg",
+    // "/whatwedo/plastic3.jpeg",
+    // "/whatwedo/plastic4.jpeg",
+    // "/whatwedo/plastic5.jpeg",
+    // "/whatwedo/plastic6.jpeg",
+    // "/whatwedo/plastic7.jpeg",
+    // "/whatwedo/plastic8.jpeg",
+    // "/whatwedo/plastic9.jpeg",
+    // "/whatwedo/plastic10.jpeg",
+    // "/whatwedo/plastic12.jpeg",
+    "/images/household1.jpg",
+    "/images/household2.jpg",
+    "/images/household3.jpg",
+    "/images/household4.jpg",
+    "/images/household5.jpg",
+    "/images/household6.jpg",
   ];
 
   const sdgImages = [
@@ -119,7 +129,7 @@ export default function WhatWeDo() {
   {/* Text - comes first on mobile, second on desktop */}
   <div className="text-left md:order-2">
     <h2 className="text-3xl font-bold">
-      Plastic <span className="gradient-text">Manufacturing</span>
+      Plastic  <span className="gradient-text">Product Manufacturing</span>
     </h2>
     <p className="mt-6 text-gray-600 leading-relaxed">
       We leverage our internally processed pellets and flakes to manufacture durable, eco-friendly finished goods, effectively closing the waste loop.
@@ -143,7 +153,7 @@ export default function WhatWeDo() {
         <div className="grid md:grid-cols-2 gap-12 items-center ">
           <div>
             <h2 className="text-3xl font-bold">
-              Susatainability <span className="gradient-text">Consultation</span>
+              Sustainability <span className="gradient-text">Consultation</span>
             </h2>
 
             <p className="mt-6 text-gray-600 leading-relaxed">
@@ -199,11 +209,14 @@ export default function WhatWeDo() {
           ) : (
             <div className="flex justify-center">
               <div className="overflow-x-auto">
-                <div className="flex gap-8 pb-4">
+                <div className="flex gap-8 pb-4 px-5 justify-center md:justify-start
+">
+
                   {reports.map((report) => (
                     <div
                       key={report._id}
-                      className="w-[350px] flex-shrink-0 text-center"
+                     className="w-[85vw] max-w-[300px] flex-shrink-0 text-center mx-auto"
+
                     >
                       <div className="bg-white h-[420px] rounded-md overflow-hidden shadow-sm hover:shadow-md transition flex items-center justify-center p-4">
                         <img
