@@ -209,13 +209,13 @@ export default function WhatWeDo() {
           ) : (
             <div className="flex justify-center">
               <div className="overflow-x-auto">
-                <div className="flex gap-8 pb-4 px-5 justify-center md:justify-start
+                <div className="flex gap-8 pb-4 px-5 justify-start md:justify-start
 ">
 
                   {reports.map((report) => (
                     <div
                       key={report._id}
-                     className="w-[85vw] max-w-[300px] flex-shrink-0 text-center mx-auto"
+                     className="w-[85vw] max-w-[350px] flex-shrink-0 text-center mx-auto"
 
                     >
                       <div className="bg-white h-[420px] rounded-md overflow-hidden shadow-sm hover:shadow-md transition flex items-center justify-center p-4">
