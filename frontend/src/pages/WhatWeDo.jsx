@@ -260,7 +260,7 @@ export default function WhatWeDo() {
                 >
                   {/* ✅ CLICKABLE COVER IMAGE */}
                   <a
-                    href={`${getApiBaseUrl()}/api/impact-reports/${report._id}/view`}
+                    href={`${getApiBaseUrl()}api/impact-reports/${report._id}/view`}
                     target="_blank"
                     rel="noopener noreferrer"
                     title={`Open Impact Report ${report.year}`}
@@ -288,7 +288,7 @@ export default function WhatWeDo() {
                   {/* ✅ VIEW BUTTON */}
                   <div className="flex flex-col gap-2 mt-4">
                     <a
-                      href={`${getApiBaseUrl().replace(/\/$/, "")}/api/impact-reports/${report._id}/view`}
+                      href={`${getApiBaseUrl()}api/impact-reports/${report._id}/view`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-block bg-[#8BA63E] text-white px-16 py-3 rounded-full text-sm font-medium hover:bg-[#7A9337] transition"
