@@ -24,7 +24,8 @@ app.use(
       "https://chanjadatti-1.onrender.com",
       "http://chanjadatti-1.onrender.com",
       "https://chanjadatti.onrender.com",
-      "https://chanjadatti.com"
+      "https://chanjadatti.com",
+      "https://www.chanjadatti.com" 
     ],
     credentials: true,
   })
