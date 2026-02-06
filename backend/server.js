@@ -23,7 +23,8 @@ app.use(
       "http://localhost:4000",
       "https://chanjadatti-1.onrender.com",
       "http://chanjadatti-1.onrender.com",
-      "https://chanjadatti.onrender.com"
+      "https://chanjadatti.onrender.com",
+      "https://chanjadatti.com"
     ],
     credentials: true,
   })
