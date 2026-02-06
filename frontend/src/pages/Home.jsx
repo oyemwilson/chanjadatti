@@ -18,6 +18,8 @@ const Home = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCampaignModal, setShowCampaignModal] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+
 
 
   /* ---------- FETCH CAMPAIGNS ---------- */
@@ -209,13 +211,23 @@ const Home = () => {
             </div>
 
             {/* RIGHT IMAGE – BIGGER */}
-            <div className="flex justify-center lg:justify-end">
-              <img
-                src="/images/hero-img.webp"
-                alt="Hero Illustration"
-                className="w-full max-w-lg lg:max-w-xl xl:max-w-xl h-auto"
-              />
-            </div>
+<div className="flex justify-center lg:justify-end relative">
+  {!imgLoaded && (
+    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded" />
+  )}
+
+  <img
+    src="/images/hero-img.webp"
+    alt="Hero Illustration"
+    loading="lazy"
+    decoding="async"
+    onLoad={() => setImgLoaded(true)}
+    className={`w-full max-w-lg lg:max-w-xl xl:max-w-xl h-auto transition-opacity duration-500 ${
+      imgLoaded ? "opacity-100" : "opacity-0"
+    }`}
+  />
+</div>
+
           </div>
 
           {/* PARTNERS SLIDER */}

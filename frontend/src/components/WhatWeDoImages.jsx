@@ -12,7 +12,8 @@ export default function WhatWeDoImages({ images = [] }) {
   };
 
   return (
-    <div className="relative w-full h-[250px] md:h-[650px]  rounded-xl overflow-hidden bg-gray-200">
+    <div className="relative w-full h-[250px] md:h-[650px] rounded-xl overflow-hidden bg-gray-200">
+      
       {/* Images */}
       <div
         className="flex transition-transform duration-500 ease-in-out h-full"
@@ -22,8 +23,10 @@ export default function WhatWeDoImages({ images = [] }) {
           <img
             key={i}
             src={img}
-            alt=""
-            className="w-full h-full object-cover  flex-shrink-0"
+            alt={`what-we-do-${i}`}
+            loading={i === index || i === index + 1 ? "eager" : "lazy"} // ⭐ Smart Preload
+            decoding="async"
+            className="w-full h-full object-cover flex-shrink-0"
           />
         ))}
       </div>

@@ -10,6 +10,8 @@ export default function Blog() {
   const [blogs, setBlogs] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true); // ⭐ ADD
+  const [loaded, setLoaded] = useState(false);
+
 
   /* ---------- FETCH BLOGS ---------- */
   useEffect(() => {
@@ -48,11 +50,23 @@ export default function Blog() {
         <div className="grid md:grid-cols-2 gap-10 items-start">
           {currentBlogs.map((blog) => (
             <div key={blog._id} className="min-w-0">
-              <img
-                src={blog.image}
-                className="h-[260px] w-full object-cover mb-4 rounded"
-                alt={blog.title}
-              />
+<div className="relative">
+  {!loaded && (
+    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded mb-4" />
+  )}
+
+  <img
+    src={blog.image}
+    alt={blog.title}
+    loading="lazy"
+    decoding="async"
+    onLoad={() => setLoaded(true)}
+    className={`h-[260px] w-full object-cover mb-4 rounded transition-opacity duration-500 ${
+      loaded ? "opacity-100" : "opacity-0"
+    }`}
+  />
+</div>
+
 
               <p className="text-sm text-gray-500 mb-1">
                 {new Date(blog.publishedAt).toDateString()}
