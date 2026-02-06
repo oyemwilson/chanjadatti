@@ -354,7 +354,7 @@ export default function WhatWeDo() {
 
 
       {/* CTA */}
-      <section className="bg-[#F3F8E6] py-16 mt-64">
+      <section className="bg-[#F3F8E6] py-16 mt-32">
         <div className="max-w-[80%] mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <h3 className="text-4xl font-semibold text-gray-900">

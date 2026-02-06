@@ -530,18 +530,21 @@ const Home = () => {
   {/* ================= DESKTOP LIST ================= */}
 
   {/* ================= MOBILE BUTTON GRID ================= */}
-  <div className=" w-full  lg:hidden">
-    {campaigns.map((campaign) => (
+<div className="w-full lg:hidden">
+  {[...campaigns]
+    .slice(0, 3) // only first 4
+    .map((campaign) => (
       <Link
         key={campaign._id}
         to={`/campaigns/${campaign._id}`}
-        className="flex items-center  justify-center text-center px-3 py-10 rounded-lg border border-gray-200 
+        className="flex items-center justify-center text-center px-3 py-10 rounded-lg border border-gray-200 
                    hover:bg-[#9DB36B] hover:text-white transition-all text-xl font-medium"
       >
         {campaign.title}
       </Link>
     ))}
-  </div>
+</div>
+
 
 </div>
 
