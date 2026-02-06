@@ -340,7 +340,7 @@ export default function WhatWeDo() {
                 onClick={() => scrollToIndex(index)}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${
                   index === currentIndex
-                    ? "bg-[#8BA63E] w-8"
+                    ? "bg-[#8BA63E] w-2.5"
                     : "bg-gray-300"
                 }`}
               />
