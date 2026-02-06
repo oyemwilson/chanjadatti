@@ -44,7 +44,7 @@ useEffect(() => {
               <img
                 src="/images/logo.png"
                 alt="Chanja Datti"
-                className="h-16 w-auto cursor-pointer"
+                className="h-10 md:h-16 w-auto cursor-pointer"
               />
             </Link>
           </div>
@@ -193,7 +193,7 @@ useEffect(() => {
     >
       {campaign.title}
       {campaign.isActive && (
-        <span className="ml-2 text-xs text-green-600">(Active)</span>
+        <span className="ml-2 text-xs text-green-600"></span>
       )}
     </Link>
   ))}

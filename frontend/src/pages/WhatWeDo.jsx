@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ImageCarousel from "../components/ImageCarousel";
 import api from "../utils/axiosConfig";
 import WhatWeDoImages from "../components/WhatWeDoImages";
@@ -15,10 +15,10 @@ export default function WhatWeDo() {
     "/whatwedo/waste5.jpeg",
     "/whatwedo/waste6.jpeg",
     "/whatwedo/waste7.jpeg",
-         "/whatwedo/plastic1.jpeg",
+    "/whatwedo/plastic1.jpeg",
     "/whatwedo/plastic2.jpeg",
-     "/whatwedo/plastic3.jpeg",
-     "/whatwedo/plastic4.jpeg",
+    "/whatwedo/plastic3.jpeg",
+    "/whatwedo/plastic4.jpeg",
   ];
 
   const consultationImages = [
@@ -66,7 +66,46 @@ export default function WhatWeDo() {
   ];
 
   const [reports, setReports] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
+  const scrollRef = useRef(null);
+
+  // Check scroll position to show/hide arrows
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setShowLeftArrow(scrollLeft > 10);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
+      
+      // Calculate current index based on scroll position
+      const cardWidth = scrollRef.current.firstChild?.offsetWidth || 0;
+      const gap = 32; // 8 * 4 (gap-8)
+      const index = Math.round(scrollLeft / (cardWidth + gap));
+      setCurrentIndex(index);
+    }
+  };
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (scrollContainer) {
+      handleScroll(); // Initial check
+      scrollContainer.addEventListener('scroll', handleScroll);
+      return () => scrollContainer.removeEventListener('scroll', handleScroll);
+    }
+  }, [reports]);
+
+  const scrollToIndex = (index) => {
+    if (scrollRef.current) {
+      const cardWidth = scrollRef.current.firstChild?.offsetWidth || 0;
+      const gap = 32;
+      scrollRef.current.scrollTo({
+        left: index * (cardWidth + gap),
+        behavior: 'smooth'
+      });
+    }
+  };
 
   /* ---------- FETCH REPORTS ---------- */
   useEffect(() => {
@@ -125,30 +164,30 @@ export default function WhatWeDo() {
         </div>
 
         {/* Plastic Manufacturing */}
-<div className="grid md:grid-cols-2 gap-12 items-center">
-  {/* Text - comes first on mobile, second on desktop */}
-  <div className="text-left md:order-2">
-    <h2 className="text-3xl font-bold">
-      Plastic  <span className="gradient-text">Product Manufacturing</span>
-    </h2>
-    <p className="mt-6 text-gray-600 leading-relaxed">
-      We leverage our internally processed pellets and flakes to manufacture durable, eco-friendly finished goods, effectively closing the waste loop.
-      <span className="font-bold ml-1">Our Products include Bales, PET Flakes, HDPE Flakes, HDPE Pellets, Preform PET, Bowls, Dustpan.</span>
-    </p>
-    <button
-      onClick={() =>
-        window.location.href =
-        "mailto:info@chanjadatti.com?subject=Order Inquiry"
-      }
-      className="mt-8 bg-[#7BA717] hover:bg-[#E2F0CE] hover:text-black text-white px-6 py-3 rounded-full"
-    >
-      Place an Order
-    </button>
-  </div>
-  
-  {/* Image - comes second on mobile, first on desktop */}
-  <ImageCarousel images={plasticImages} className="md:order-1" />
-</div>
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          {/* Text - comes first on mobile, second on desktop */}
+          <div className="text-left md:order-2">
+            <h2 className="text-3xl font-bold">
+              Plastic  <span className="gradient-text">Product Manufacturing</span>
+            </h2>
+            <p className="mt-6 text-gray-600 leading-relaxed">
+              We leverage our internally processed pellets and flakes to manufacture durable, eco-friendly finished goods, effectively closing the waste loop.
+              <span className="font-bold ml-1">Our Products include Bales, PET Flakes, HDPE Flakes, HDPE Pellets, Preform PET, Bowls, Dustpan.</span>
+            </p>
+            <button
+              onClick={() =>
+                window.location.href =
+                "mailto:info@chanjadatti.com?subject=Order Inquiry"
+              }
+              className="mt-8 bg-[#7BA717] hover:bg-[#E2F0CE] hover:text-black text-white px-6 py-3 rounded-full"
+            >
+              Place an Order
+            </button>
+          </div>
+
+          {/* Image - comes second on mobile, first on desktop */}
+          <ImageCarousel images={plasticImages} className="md:order-1" />
+        </div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center ">
           <div>
@@ -194,72 +233,125 @@ export default function WhatWeDo() {
       </section>
 
       {/* Impact Reports */}
-      <section className="bg-[#F3F8E6] py-14" id="impact">
-        <div className="lg:max-w-[80%] max-w-[100%] mx-auto px-1">
-          <h2 className="text-center text-2xl font-semibold text-gray-900 mb-10">
-            Impact Reports
-          </h2>
+<section className="bg-[#F3F8E6] py-14" id="impact">
+  <div className="lg:max-w-[80%] max-w-[100%] mx-auto px-1">
+    <h2 className="text-center text-2xl font-semibold text-gray-900 mb-10">
+      Impact Reports
+    </h2>
 
-          {loading ? (
-            <div className="text-center text-gray-600">Loading reports...</div>
-          ) : reports.length === 0 ? (
-            <div className="text-center text-gray-600">
-              No reports available yet.
-            </div>
-          ) : (
-            <div className="flex justify-center">
-              <div className="overflow-x-auto">
-                <div className="flex gap-8 pb-4 px-5 justify-start md:justify-start
-">
-
-                  {reports.map((report) => (
-                    <div
-                      key={report._id}
-                     className="w-[85vw] max-w-[350px] flex-shrink-0 text-center mx-auto"
-
-                    >
-                      <div className="bg-white h-[420px] rounded-md overflow-hidden shadow-sm hover:shadow-md transition flex items-center justify-center p-4">
-                        <img
-                          src={report.coverImage}
-                          alt={`Impact Report ${report.year}`}
-                          className="max-w-full max-h-full object-contain"
-                          onError={(e) => {
-                            e.currentTarget.src =
-                              "https://via.placeholder.com/350x420?text=Impact+Report";
-                          }}
-                        />
-                      </div>
-
-                      <p className="mt-4 font-medium text-gray-900 text-lg">
-                        {report.year}
-                      </p>
-
-                      <div className="flex flex-col gap-2 mt-4">
-                        <a
-                          href={`${getApiBaseUrl()}/api/impact-reports/${report._id}/view`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-block bg-[#8BA63E] text-white px-16 py-3 rounded-full text-sm font-medium hover:bg-[#7A9337] transition"
-                        >
-                          View PDF
-                        </a>
-
-                        {/* <a
-                          href={report.pdfUrl}
-                          download={`Impact-Report-${report.year}.pdf`}
-                          className="inline-block bg-[#8BA63E] text-white px-16 py-3 rounded-full text-sm font-medium hover:bg-[#7A9337] transition"
-                        >
-                          Download
-                        </a> */}
-                      </div>
+    {loading ? (
+      <div className="text-center text-gray-600">Loading reports...</div>
+    ) : reports.length === 0 ? (
+      <div className="text-center text-gray-600">
+        No reports available yet.
+      </div>
+    ) : (
+      <div className="relative">
+        <div className="flex justify-center">
+          <div
+            className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scroll-smooth"
+            ref={scrollRef}
+          >
+            <div className="flex gap-8 pb-4 px-5 justify-start">
+              {reports.map((report) => (
+                <div
+                  key={report._id}
+                  className="w-[85vw] max-w-[350px] flex-shrink-0 text-center mx-auto"
+                >
+                  {/* ✅ CLICKABLE COVER IMAGE */}
+                  <a
+                    href={`${getApiBaseUrl()}/api/impact-reports/${report._id}/view`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={`Open Impact Report ${report.year}`}
+                    aria-label={`Open Impact Report ${report.year}`}
+                    className="block bg-white h-[420px] rounded-md overflow-hidden shadow-sm hover:shadow-md transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#9DB36B]"
+                  >
+                    <div className="w-full h-full flex items-center justify-center p-4">
+                      <img
+                        src={report.coverImage}
+                        alt={`Impact Report ${report.year}`}
+                        className="max-w-full max-h-full object-contain"
+                        onError={(e) => {
+                          e.currentTarget.src =
+                            "https://via.placeholder.com/350x420?text=Impact+Report";
+                        }}
+                      />
                     </div>
-                  ))}
+                  </a>
+
+                  {/* YEAR */}
+                  <p className="mt-4 font-medium text-gray-900 text-lg">
+                    {report.year}
+                  </p>
+
+                  {/* ✅ VIEW BUTTON */}
+                  <div className="flex flex-col gap-2 mt-4">
+                    <a
+                      href={`${getApiBaseUrl()}/api/impact-reports/${report._id}/view`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block bg-[#8BA63E] text-white px-16 py-3 rounded-full text-sm font-medium hover:bg-[#7A9337] transition"
+                    >
+                      View Report
+                    </a>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-          )}
+          </div>
         </div>
-      </section>
+
+        {/* ===== MOBILE ARROWS ===== */}
+        {reports.length > 1 && (
+          <>
+            {showLeftArrow && (
+              <button
+                onClick={() =>
+                  scrollToIndex(Math.max(0, currentIndex - 1))
+                }
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg hidden lg:hidden"
+              >
+                ‹
+              </button>
+            )}
+
+            {showRightArrow && (
+              <button
+                onClick={() =>
+                  scrollToIndex(
+                    Math.min(reports.length - 1, currentIndex + 1)
+                  )
+                }
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg hidden lg:hidden"
+              >
+                ›
+              </button>
+            )}
+          </>
+        )}
+
+        {/* ===== DOT INDICATORS ===== */}
+        {reports.length > 1 && (
+          <div className="flex justify-center gap-2 mt-6 lg:hidden">
+            {reports.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToIndex(index)}
+                className={`w-2.5 h-2.5 rounded-full transition-all ${
+                  index === currentIndex
+                    ? "bg-[#8BA63E] w-8"
+                    : "bg-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+</section>
+
 
       {/* CTA */}
       <section className="bg-[#F3F8E6] py-16 mt-64">

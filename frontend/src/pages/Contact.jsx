@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import Loading from "../components/Loading";
+import ReCAPTCHA from "react-google-recaptcha";
+
+
 
 export default function Contact() {
   const [loading, setLoading] = useState(true);
   const [formStatus, setFormStatus] = useState({ type: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+const [captchaValue, setCaptchaValue] = useState(null);
+
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -14,50 +20,68 @@ export default function Contact() {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setFormStatus({ type: "", message: "" });
 
-    const form = e.target;
-    const formData = new FormData(form);
 
-    try {
-      const response = await fetch(form.action, {
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-        },
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+if (!captchaValue) {
+  setFormStatus({
+    type: "error",
+    message: "Please complete the captcha.",
+  });
+  return;
+}
+
+  setIsSubmitting(true);
+  setFormStatus({ type: "", message: "" });
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  // Add captcha token to form submission
+formData.append("g-recaptcha-response", captchaValue);
+
+
+  try {
+    const response = await fetch(form.action, {
+      method: "POST",
+      body: formData,
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (response.ok) {
+      setFormStatus({
+        type: "success",
+        message: "Thank you! Your message has been sent successfully.",
       });
-
-      if (response.ok) {
-        setFormStatus({
-          type: "success",
-          message: "Thank you! Your message has been sent successfully.",
-        });
-        form.reset();
-      } else {
-        setFormStatus({
-          type: "error",
-          message: "Oops! Something went wrong. Please try again.",
-        });
-      }
-    } catch (error) {
+      form.reset();
+      setCaptchaValue(null);
+    } else {
       setFormStatus({
         type: "error",
         message: "Oops! Something went wrong. Please try again.",
       });
-    } finally {
-      setIsSubmitting(false);
     }
-  };
+  } catch (error) {
+    setFormStatus({
+      type: "error",
+      message: "Oops! Something went wrong. Please try again.",
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   if (loading) return <Loading />;
 
   return (
     <section className="w-full bg-white py-16">
-      <div className="max-w-[80%] mx-auto px-4 sm:px-6">
+      <div className="max-w-[95%] lg:max-w-[80%] mx-auto px-4 sm:px-6">
 
         {/* Title */}
         <h2 className="text-2xl sm:text-3xl font-semibold mb-10">
@@ -130,6 +154,14 @@ export default function Contact() {
                   className="w-full rounded-md border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#9DB36B]"
                 />
               </div>
+<div className="flex justify-center md:justify-start">
+  <ReCAPTCHA
+    sitekey="6LeqhGIsAAAAAC75x1McBq9PgCKh1HXECkdYbm3F"
+    onChange={(value) => setCaptchaValue(value)}
+  />
+</div>
+
+
 
               {/* BUTTON */}
               <button

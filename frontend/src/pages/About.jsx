@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import api from "../utils/axiosConfig";
 import Loading from "../components/Loading";
+
+
 
 export default function AboutPage() {
 
@@ -70,6 +72,17 @@ function OurTeam() {
     fetchMembers();
   }, []);
 
+  useEffect(() => {
+  if (sectionRef.current) {
+    sectionRef.current.scrollIntoView({
+      behavior: "instant",
+      block: "start",
+    });
+  }
+}, [page]);
+
+const sectionRef = useRef(null);
+
   /* PAGINATION BASED ON BACKEND DATA */
   const totalPages = Math.ceil(members.length / ITEMS_PER_PAGE);
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
@@ -85,7 +98,8 @@ function OurTeam() {
   if (!members.length) return null;
 
   return (
-    <section className="py-16 bg-white">
+   <section ref={sectionRef} className="py-16 bg-white">
+
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-center text-4xl font-semibold mb-10">
           Our <span className="gradient-text">Team</span>
