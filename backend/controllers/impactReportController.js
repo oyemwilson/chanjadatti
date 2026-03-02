@@ -27,13 +27,12 @@ export const uploadReport = async (req, res) => {
     // Upload 1: PDF as RAW for actual download/view link
     const pdfRawUpload = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
-    {
-      folder: "impact-reports/pdfs",
-      resource_type: "raw",
-      public_id: `report-${year}`,   // 👈 FIXED ID
-      overwrite: true,              // 👈 allow overwrite
-      invalidate: true,             // 👈 clear CDN cache
-    },
+        {
+          folder: "impact-reports/pdfs",
+          resource_type: "raw",
+          public_id: `report-${year}-${timestamp}`,
+          type: "upload",
+        },
         (error, result) => {
           if (error) {
             console.error("Raw PDF upload error:", error);
@@ -50,14 +49,12 @@ export const uploadReport = async (req, res) => {
     // Upload 2: PDF as IMAGE for preview generation
     const pdfImageUpload = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
-    {
-      folder: "impact-reports/previews",
-      resource_type: "image",
-      format: "pdf",
-      public_id: `preview-${year}`,  // 👈 FIXED ID
-      overwrite: true,
-      invalidate: true,
-    },
+        {
+          folder: "impact-reports/previews",
+          resource_type: "image",
+          format: "pdf",
+          public_id: `preview-${year}-${timestamp}`,
+        },
         (error, result) => {
           if (error) {
             console.error("Image PDF upload error:", error);
@@ -119,15 +116,19 @@ export const updateReport = async (req, res) => {
       return res.status(400).json({ message: "PDF file is required" });
     }
 
-    const year = report.year;
+    // 🔥 Extract original public_id from stored URL
+    const pdfUrlParts = report.pdfUrl.split("/");
+    const fileName = pdfUrlParts[pdfUrlParts.length - 1]; 
+    const publicIdWithoutExtension = fileName.replace(".pdf", "");
 
-    // Overwrite RAW PDF
+    const rawPublicId = `impact-reports/pdfs/${publicIdWithoutExtension}`;
+
+    // Overwrite the EXACT original file
     await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          folder: "impact-reports/pdfs",
           resource_type: "raw",
-          public_id: `report-${year}`,
+          public_id: rawPublicId,
           overwrite: true,
           invalidate: true,
         },
@@ -139,26 +140,7 @@ export const updateReport = async (req, res) => {
       uploadStream.end(req.file.buffer);
     });
 
-    // Overwrite Preview
-    await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: "impact-reports/previews",
-          resource_type: "image",
-          format: "pdf",
-          public_id: `preview-${year}`,
-          overwrite: true,
-          invalidate: true,
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-      uploadStream.end(req.file.buffer);
-    });
-
-    res.json({ message: "Report updated successfully" });
+    res.json({ message: "Old file replaced successfully" });
 
   } catch (err) {
     console.error("Update error:", err);
