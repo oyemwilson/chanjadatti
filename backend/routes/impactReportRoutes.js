@@ -5,6 +5,7 @@ import {
   uploadReport,
   deleteReport,
   viewPdf,
+  updateReport,
 } from "../controllers/impactReportController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
@@ -14,5 +15,12 @@ router.get("/", getAllReports);
 router.post("/", protect, admin, uploadImpactReport, uploadReport);
 router.delete("/:id", protect, admin, deleteReport);
 router.get("/:id/view", viewPdf); 
+router.put(
+  "/:id",
+  protect,
+  admin,
+  uploadImpactReport,   // 👈 USE SAME MIDDLEWARE
+  updateReport
+);
 
 export default router;

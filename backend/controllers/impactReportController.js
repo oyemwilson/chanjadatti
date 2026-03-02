@@ -27,12 +27,13 @@ export const uploadReport = async (req, res) => {
     // Upload 1: PDF as RAW for actual download/view link
     const pdfRawUpload = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: "impact-reports/pdfs",
-          resource_type: "raw",
-          public_id: `report-${year}-${timestamp}`,
-          type: "upload",
-        },
+    {
+      folder: "impact-reports/pdfs",
+      resource_type: "raw",
+      public_id: `report-${year}`,   // 👈 FIXED ID
+      overwrite: true,              // 👈 allow overwrite
+      invalidate: true,             // 👈 clear CDN cache
+    },
         (error, result) => {
           if (error) {
             console.error("Raw PDF upload error:", error);
@@ -49,12 +50,14 @@ export const uploadReport = async (req, res) => {
     // Upload 2: PDF as IMAGE for preview generation
     const pdfImageUpload = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: "impact-reports/previews",
-          resource_type: "image",
-          format: "pdf",
-          public_id: `preview-${year}-${timestamp}`,
-        },
+    {
+      folder: "impact-reports/previews",
+      resource_type: "image",
+      format: "pdf",
+      public_id: `preview-${year}`,  // 👈 FIXED ID
+      overwrite: true,
+      invalidate: true,
+    },
         (error, result) => {
           if (error) {
             console.error("Image PDF upload error:", error);
@@ -100,6 +103,65 @@ export const uploadReport = async (req, res) => {
     res.status(201).json(report);
   } catch (err) {
     console.error("Upload error:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const updateReport = async (req, res) => {
+  try {
+    const report = await ImpactReport.findById(req.params.id);
+
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: "PDF file is required" });
+    }
+
+    const year = report.year;
+
+    // Overwrite RAW PDF
+    await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: "impact-reports/pdfs",
+          resource_type: "raw",
+          public_id: `report-${year}`,
+          overwrite: true,
+          invalidate: true,
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(req.file.buffer);
+    });
+
+    // Overwrite Preview
+    await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: "impact-reports/previews",
+          resource_type: "image",
+          format: "pdf",
+          public_id: `preview-${year}`,
+          overwrite: true,
+          invalidate: true,
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(req.file.buffer);
+    });
+
+    res.json({ message: "Report updated successfully" });
+
+  } catch (err) {
+    console.error("Update error:", err);
     res.status(500).json({ message: err.message });
   }
 };

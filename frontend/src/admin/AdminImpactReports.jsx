@@ -6,6 +6,7 @@ export default function AdminImpactReports() {
   const [year, setYear] = useState("");
   const [pdf, setPdf] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [editingId, setEditingId] = useState(null);
 
   const loadReports = async () => {
     try {
@@ -20,32 +21,43 @@ export default function AdminImpactReports() {
     loadReports();
   }, []);
 
+  const resetForm = () => {
+    setYear("");
+    setPdf(null);
+    setEditingId(null);
+    document.getElementById("pdf-input").value = "";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("editingId at submit:", editingId);
 
-    if (!pdf) {
-      return alert("Please select a PDF file");
-    }
+    if (!pdf) return alert("Please select a PDF file");
 
     const formData = new FormData();
     formData.append("year", year);
-    formData.append("pdf", pdf);
+    formData.append("pdf", pdf); // IMPORTANT: match backend
 
     try {
       setUploading(true);
-      await api.post("/api/impact-reports", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
 
-      setYear("");
-      setPdf(null);
-      document.getElementById("pdf-input").value = "";
+      if (editingId) {
+        await api.put(`/api/impact-reports/${editingId}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        alert("Report updated successfully!");
+      } else {
+        await api.post("/api/impact-reports", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        alert("Report uploaded successfully!");
+      }
 
+      resetForm();
       loadReports();
-      alert("Report uploaded successfully!");
     } catch (err) {
-      console.error("Upload error:", err);
-      alert(err.response?.data?.message || "Failed to upload report");
+      console.error("Error:", err);
+      alert(err.response?.data?.message || "Operation failed");
     } finally {
       setUploading(false);
     }
@@ -62,7 +74,12 @@ export default function AdminImpactReports() {
     }
   };
 
-  // Get the base URL for API calls
+  const startEdit = (report) => {
+    setYear(report.year);
+    setEditingId(report._id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const getApiBaseUrl = () => {
     return api.defaults.baseURL || "";
   };
@@ -86,15 +103,13 @@ export default function AdminImpactReports() {
             onChange={(e) => setYear(e.target.value)}
             className="border p-3 rounded w-full"
             required
+            disabled={editingId} // prevent changing year during update
           />
         </div>
 
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">
             PDF File
-            <span className="text-gray-500 text-xs ml-2">
-              (Preview will be auto-generated)
-            </span>
           </label>
           <input
             id="pdf-input"
@@ -115,65 +130,59 @@ export default function AdminImpactReports() {
           disabled={uploading}
           className="bg-[#8BA63E] text-white py-3 rounded w-full disabled:opacity-60 hover:bg-[#7a9335] transition"
         >
-          {uploading ? "Uploading..." : "Upload Report"}
+          {uploading
+            ? editingId
+              ? "Updating..."
+              : "Uploading..."
+            : editingId
+            ? "Update Report"
+            : "Upload Report"}
         </button>
       </form>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {reports.length === 0 ? (
-          <p className="md:col-span-3 text-center text-gray-500 py-10">
-            No reports found. Add one above!
-          </p>
-        ) : (
-          reports.map((report) => (
-            <div
-              key={report._id}
-              className="bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition"
-            >
-              <div className="h-80 relative bg-white flex items-center justify-center p-4">
-                <img
-                  src={report.coverImage}
-                  alt={`Impact Report ${report.year}`}
-                  className="max-h-full max-w-full object-contain"
-                  onError={(e) => {
-                    e.target.style.display = "none";
-                    e.target.parentElement.innerHTML += 
-                      '<div class="flex items-center justify-center h-full text-gray-400">Preview not available</div>';
-                  }}
-                />
-                <span className="absolute top-2 right-2 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-medium">
-                  {report.year}
-                </span>
-              </div>
-
-              <div className="p-4 space-y-3">
-                <a
-                  href={`${getApiBaseUrl()}/api/impact-reports/${report._id}/view`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full text-center bg-blue-50 text-blue-600 border border-blue-200 py-2 rounded hover:bg-blue-600 hover:text-white transition"
-                >
-                  📄 View PDF
-                </a>
-<a 
-                
-                  href={report.pdfUrl}
-                  download={`Impact-Report-${report.year}.pdf`}
-                  className="block w-full text-center bg-green-50 text-green-600 border border-green-200 py-2 rounded hover:bg-green-600 hover:text-white transition"
-                >
-                  ⬇️ Download PDF
-                </a>
-
-                <button
-                  onClick={() => handleDelete(report._id)}
-                  className="w-full bg-red-50 text-red-600 border border-red-200 py-2 rounded hover:bg-red-600 hover:text-white transition"
-                >
-                  🗑️ Delete Report
-                </button>
-              </div>
+        {reports.map((report) => (
+          <div
+            key={report._id}
+            className="bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition"
+          >
+            <div className="h-80 relative bg-white flex items-center justify-center p-4">
+              <img
+                src={report.coverImage}
+                alt={`Impact Report ${report.year}`}
+                className="max-h-full max-w-full object-contain"
+              />
+              <span className="absolute top-2 right-2 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-medium">
+                {report.year}
+              </span>
             </div>
-          ))
-        )}
+
+            <div className="p-4 space-y-3">
+              <a
+                href={`${getApiBaseUrl()}/api/impact-reports/${report._id}/view`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full text-center bg-blue-50 text-blue-600 border border-blue-200 py-2 rounded hover:bg-blue-600 hover:text-white transition"
+              >
+                📄 View PDF
+              </a>
+
+              <button
+                onClick={() => startEdit(report)}
+                className="w-full bg-yellow-50 text-yellow-700 border border-yellow-200 py-2 rounded hover:bg-yellow-600 hover:text-white transition"
+              >
+                ✏️ Update PDF
+              </button>
+
+              <button
+                onClick={() => handleDelete(report._id)}
+                className="w-full bg-red-50 text-red-600 border border-red-200 py-2 rounded hover:bg-red-600 hover:text-white transition"
+              >
+                🗑️ Delete Report
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
