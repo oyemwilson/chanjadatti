@@ -182,62 +182,69 @@ function MissionVision() {
     <>
       <section className="bg-[#7BA717] py-16 text-white">
         <div className="max-w-5xl mx-auto px-4 text-center">
-          <h3 className="text-3xl font-semibold mb-2">Our Mission</h3>
-          <p>
-            To convert waste into commercially viable products while empowering women and youth entrepreneurs in the process.          </p>
+       <h3 className="text-2xl sm:text-3xl font-semibold mb-2">Our Mission</h3>
+          <p className="text-sm sm:text-base mx-w-xl mx-auto">
+            To convert waste into commercially viable products while empowering women and youth entrepreneurs in the process.
+          </p>
         </div>
       </section>
 
       <section className="bg-[#C4F262] py-16 text-gray-900">
         <div className="max-w-5xl mx-auto px-4 text-center">
-          <h3 className="text-3xl font-semibold mb-2">Our Vision</h3>
-          <p>
-          To become an industry name known for waste management solutions and recycling plastic waste products and youth empowerment in Nigeria within the next 5 years.          </p>
+         <h3 className="text-2xl sm:text-3xl font-semibold mb-2">Our Vision</h3>
+          <p className="text-sm sm:text-base mx-w-xl mx-auto">
+            To become an industry name known for waste management solutions and recycling plastic waste products and youth empowerment in Nigeria within the next 5 years.
+          </p>
         </div>
       </section>
     </>
   );
 }
 
-/* =======================
-   CORE VALUES
-======================= */
 function CoreValues() {
-    const values = [
-    { text: "Innovation", bg: "bg-[#7BA717]", textColor: "text-white" },
-    { text: "Integrity", bg: "bg-[#C4F262]", textColor: "text-gray-900" },
-    { text: "Impact", bg: "bg-[#F0F9E3]", textColor: "text-gray-700" },
-
-    { text: "Committed Execution", bg: "bg-[#C4F262]", textColor: "text-gray-800" },
-    { text: "Continuous improvement", bg: "bg-[#F0F9E3]", textColor: "text-black" },
-    { text: "Collaboration", bg: "bg-[#7BA717]", textColor: "text-white" },
-
-    { text: "Excellence", bg: "bg-[#F0F9E3]", textColor: "text-gray-700" },
-    { text: "Eco-friendliness", bg: "bg-[#7BA717]", textColor: "text-white" },
-    { text: "Empathy", bg: "bg-[#C4F262]", textColor: "text-gray-800" },
+  
+  const values = [
+    { text: "Innovation", icon: "/images/innovation.png", bg: "bg-[#7BA717]", textColor: "text-white" },
+    { text: "Integrity", icon: "/images/integrity.png", bg: "bg-[#C4F262]", textColor: "text-[#434141]" },
+    { text: "Impact", icon: "/images/impact.png", bg: "bg-[#F0F9E3]", textColor: "text-[#434141]" },
+    { text: "Committed Execution", icon: "/images/committed.png", bg: "bg-[#C4F262]", textColor: "text-[#434141]" },
+    { text: "Continuous Improvement", icon: "/images/continuos.png", bg: "bg-[#F0F9E3]", textColor: "text-[#434141]" },
+    { text: "Collaboration", icon: "/images/collab.png", bg: "bg-[#7BA717]", textColor: "text-white" },
+    { text: "Excellence", icon: "/images/excellence.png", bg: "bg-[#F0F9E3]", textColor: "text-[#434141]" },
+    { text: "Eco-friendliness", icon: "/images/eco.png", bg: "bg-[#7BA717]", textColor: "text-white" },
+    { text: "Empathy", icon: "/images/empathy.png", bg: "bg-[#C4F262]", textColor: "text-[#434141]" },
   ];
+
   return (
-    <section className="py-32 md:pb-32 pb:0 bg-white">
-      <div className="max-w-5xl mx-auto px-4 text-center">
+    <section className="py-16 md:py-32 bg-white">
+      <div className="max-w-5xl mx-auto px-4 text-center mb-8">
         <h3 className="text-xl font-semibold mb-4">Our Core Values</h3>
-        <p className="text-gray-600">
-         A commitment to Innovation, Integrity, Impact, Committed Execution, Continuous improvement, Collaboration, Excellence, Eco-friendliness and Empathy (ICE3)        </p>
+        <p className="text-gray-600 text-sm sm:text-base">
+          A commitment to Innovation, Integrity, Impact, Committed Execution, Continuous improvement, Collaboration, Excellence, Eco-friendliness and Empathy (ICE3)
+        </p>
       </div>
-      <div className="w-full max-w-5xl mx-auto p-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        {values.map((item, index) => (
-          <div
-            key={index}
-            className={`${item.bg} ${item.textColor} 
-            h-20 md:h-60 flex items-center justify-center 
-            text-center font-semibold text-lg md:text-xl
-            p-4`}
-          >
-            {item.text}
-          </div>
-        ))}
+      <div className="w-full max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3">
+          {values.map((item, index) => (
+            <div
+              key={index}
+              className={`${item.bg} ${item.textColor} 
+              min-h-[140px] sm:min-h-[180px] md:min-h-[240px] 
+              flex flex-col items-center justify-center 
+              text-center font-semibold text-sm sm:text-base md:text-xl 
+              gap-2 sm:gap-3 p-4`}
+            >
+              <img
+                src={item.icon}
+                alt=""
+                className="w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14"
+                onError={(e) => e.target.style.display = 'none'}
+              />
+              {item.text}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
     </section>
   );
 }

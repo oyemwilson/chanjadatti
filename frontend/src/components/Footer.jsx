@@ -89,13 +89,22 @@ export default function Footer() {
             </p>
 
             {/* Address Box */}
+
             <div className="mt-6 bg-[#E9F3D6]   p-4 text-sm text-gray-700">
               <p className="font-semibold text-[#5A7C2E]">
                 Main Office Address
               </p>
               <p className="mt-1">
-                Plot 833, Durumi District Phase II, <br />
-                Abuja, FCT, Nigeria
+                Plot 813, Durumi District Phase II, <br />
+                FCT, Abuja, Nigeria
+              </p>
+            </div>
+            <div className="mt-2 bg-[#E9F3D6]   p-4 text-sm text-gray-700">
+              <p className="font-semibold text-[#5A7C2E]">
+                Factory Address
+              </p>
+              <p className="mt-1">
+Besides NNPC Filling Station, Off Giri Junction, Giri, Gwagwalada, FCT, Abuja, Nigeria.
               </p>
             </div>
           </div>
@@ -158,53 +167,52 @@ export default function Footer() {
               Subscribe to our Newsletter
             </h4>
 
-      <div>
-        {/* Success/Error Message */}
-        {formStatus.message && (
-          <div
-            className={`mb-2 p-2 rounded text-sm ${
-              formStatus.type === "success"
-                ? "bg-green-100 text-green-700 border border-green-300"
-                : "bg-red-100 text-red-700 border border-red-300"
-            }`}
-          >
-            {formStatus.message}
-          </div>
-        )}
+            <div>
+              {/* Success/Error Message */}
+              {formStatus.message && (
+                <div
+                  className={`mb-2 p-2 rounded text-sm ${formStatus.type === "success"
+                      ? "bg-green-100 text-green-700 border border-green-300"
+                      : "bg-red-100 text-red-700 border border-red-300"
+                    }`}
+                >
+                  {formStatus.message}
+                </div>
+              )}
 
-        <form
-          action="https://www.formbackend.com/f/eb508c55ca0021fd"
-          method="POST"
-          onSubmit={handleNewsletterSubmit}
-          className="flex items-center border rounded-md overflow-hidden"
-        >
-          <input
-            type="email"
-            name="email"
-            required
-            placeholder="Enter your Email"
-            className="w-full px-3 py-2 text-sm outline-none"
-          />
+              <form
+                action="https://www.formbackend.com/f/eb508c55ca0021fd"
+                method="POST"
+                onSubmit={handleNewsletterSubmit}
+                className="flex items-center border rounded-md overflow-hidden"
+              >
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder="Enter your Email"
+                  className="w-full px-3 py-2 text-sm outline-none"
+                />
 
-          {/* ⭐ Identify source */}
-          <input type="hidden" name="formType" value="newsletter-footer" />
+                {/* ⭐ Identify source */}
+                <input type="hidden" name="formType" value="newsletter-footer" />
 
-          {/* ⭐ Optional anti spam */}
-          <input
-            type="text"
-            name="_gotcha"
-            style={{ display: "none" }}
-          />
+                {/* ⭐ Optional anti spam */}
+                <input
+                  type="text"
+                  name="_gotcha"
+                  style={{ display: "none" }}
+                />
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="bg-[#9DB36B] px-4 py-2 text-white hover:bg-[#86A85C] disabled:opacity-50 disabled:cursor-not-allowed transition"
-          >
-            {isSubmitting ? "..." : "→"}
-          </button>
-        </form>
-      </div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-[#9DB36B] px-4 py-2 text-white hover:bg-[#86A85C] disabled:opacity-50 disabled:cursor-not-allowed transition"
+                >
+                  {isSubmitting ? "..." : "→"}
+                </button>
+              </form>
+            </div>
 
             {/* Social */}
             <div className="flex items-center gap-4 mt-6 text-gray-600">
